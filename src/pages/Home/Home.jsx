@@ -1,24 +1,46 @@
-import { PricingPlan } from "../../components/PricingPlan"
+import { useEffect, useState } from "react";
+
+import { PricingPlan } from "../../components/PricingPlan";
+import api from "../../api/axios";
+
+
 
 export const Home = () => {
+    const [homePage, setHomePage] = useState([]);
+
+    useEffect(() => {
+        const fetchHomePage = async () => {
+            try {
+                const response = await api.get("/homePage");
+
+                setHomePage(response.data.data.homePage);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                console.log("Done")
+            }
+        };
+
+        fetchHomePage();
+    }, []);
+
+
+
     return (
         <>
             {/* SECTION 1: HERO */}
             <section className="py-5 my-lg-5 text-center position-relative overflow-hidden">
                 <div className="container position-relative z-1 my-4">
                     <span className="badge rounded-pill bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-3 py-2 mb-4">
-                        <i className="bi bi-stars me-1"></i> Introducing AI 3.0 Engine
+                        <i className="bi bi-stars me-1"></i> {homePage?.heroSubHeading}
                     </span>
 
                     <h1 className="display-3 fw-bold text-white mb-4 mx-auto" style={{ maxWidth: '850px' }}>
-                        Build Next-Generation{' '}
-                        <span style={{ background: 'linear-gradient(135deg, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                            AI Applications
-                        </span>
+                        {homePage?.heroHeading?.split(" ").slice(0, 2).join(" ")} <span style={{ background: 'linear-gradient(135deg, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{homePage?.heroHeading?.split(" ").slice(2).join(" ")}</span>
                     </h1>
 
                     <p className="lead text-secondary mx-auto mb-5" style={{ maxWidth: '650px' }}>
-                        Automate complex workflows, deploy autonomous agents, and scale your LLM infrastructure using a unified visual pipeline.
+                        {homePage?.heroDescription}
                     </p>
 
                     <div className="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-5">
@@ -37,10 +59,10 @@ export const Home = () => {
                     <div className="pt-4 border-top border-secondary border-opacity-10 d-flex flex-wrap align-items-center justify-content-center gap-4 text-secondary small">
                         <div>
                             <span className="text-warning">★ ★ ★ ★ ★</span>
-                            <strong class="text-light ms-1">4.9/5</strong> from 2,000+ developers
+                            <strong class="text-light ms-1">4.9/5</strong> {homePage?.heroRatingLeft}
                         </div>
                         <div className="d-none d-sm-block">•</div>
-                        <div>Trusted by engineering teams at 500+ tech companies</div>
+                        <div>{homePage?.heroRatingRight}</div>
                     </div>
                 </div>
             </section>
@@ -49,46 +71,24 @@ export const Home = () => {
             <section id="features" className="py-5 bg-black bg-opacity-20 border-top border-bottom border-secondary border-opacity-10">
                 <div className="container py-4">
                     <div className="text-center mb-5">
-                        <span className="text-info text-uppercase fw-bold small">Core Capabilities</span>
-                        <h2 className="display-6 fw-bold text-white mt-1">Engineered for autonomous precision</h2>
+                        <span className="text-info text-uppercase fw-bold small">{homePage?.coreSubHeading}</span>
+                        <h2 className="display-6 fw-bold text-white mt-1">{homePage?.coreHeading}</h2>
                     </div>
 
                     <div className="row g-4">
-                        <div className="col-md-4">
-                            <div className="card h-100 p-4 bg-black bg-opacity-40 border-secondary border-opacity-25 rounded-4">
-                                <div className="p-3 bg-info bg-opacity-10 text-info rounded-3 d-inline-block mb-4" style={{ width: 'fit-content' }}>
-                                    <i className="bi bi-robot fs-3"></i>
+                        {homePage?.coreCapabilities?.map(coreCapability => (
+                            <div className="col-md-4">
+                                <div className="card h-100 p-4 bg-black bg-opacity-40 border-secondary border-opacity-25 rounded-4">
+                                    <div className="p-3 bg-info bg-opacity-10 text-info rounded-3 d-inline-block mb-4" style={{ width: 'fit-content' }}>
+                                        <i className={`bi ${coreCapability?.icon} fs-3`}></i>
+                                    </div>
+                                    <h4 className="fw-bold text-white mb-2">{coreCapability?.title}</h4>
+                                    <p className="text-secondary small mb-0">
+                                        {coreCapability?.description}
+                                    </p>
                                 </div>
-                                <h4 className="fw-bold text-white mb-2">Autonomous Agents</h4>
-                                <p className="text-secondary small mb-0">
-                                    Deploy multi-step agents capable of executing external API calls, complex reasoning, and automated error corrections.
-                                </p>
                             </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100 p-4 bg-black bg-opacity-40 border-secondary border-opacity-25 rounded-4">
-                                <div className="p-3 bg-primary bg-opacity-10 text-primary rounded-3 d-inline-block mb-4" style={{ width: 'fit-content' }}>
-                                    <i className="bi bi-cpu fs-3"></i>
-                                </div>
-                                <h4 className="fw-bold text-white mb-2">Neural Fine-Tuning</h4>
-                                <p className="text-secondary small mb-0">
-                                    Fine-tune foundational LLMs on private datasets using Low-Rank Adaptation (LoRA) without data exposure risks.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100 p-4 bg-black bg-opacity-40 border-secondary border-opacity-25 rounded-4">
-                                <div className="p-3 bg-primary bg-opacity-10 text-info rounded-3 d-inline-block mb-4" style={{ width: 'fit-content' }}>
-                                    <i className="bi bi-lightning-charge fs-3"></i>
-                                </div>
-                                <h4 className="fw-bold text-white mb-2">Ultra-Low Latency</h4>
-                                <p className="text-secondary small mb-0">
-                                    Edge routing infrastructure delivers token streaming speeds up to 3x faster than traditional gateways.
-                                </p>
-                            </div>
-                        </div>
+                        ))}                     
                     </div>
                 </div>
             </section>
@@ -98,36 +98,22 @@ export const Home = () => {
                 <div className="container py-5">
                     <div className="row align-items-center g-5">
                         <div className="col-lg-6">
-                            <span className="text-info text-uppercase fw-bold small">Simple Integration</span>
-                            <h2 className="display-6 fw-bold text-white mt-2 mb-4">From raw data to active intelligence in minutes</h2>
+                            <span className="text-info text-uppercase fw-bold small">{homePage?.codeIntegrationSubHeading}</span>
+                            <h2 className="display-6 fw-bold text-white mt-2 mb-4">{homePage?.codeIntegrationHeading}</h2>
                             <p className="text-secondary mb-4">
-                                Connect vector databases, select base models, and deploy production endpoints without managing GPU clusters.
+                                {homePage?.codeIntegrationDescription}
                             </p>
 
                             <div className="d-flex flex-column gap-4">
-                                <div className="d-flex gap-3">
-                                    <span className="badge bg-secondary bg-opacity-20 text-info border border-secondary border-opacity-20 rounded-circle d-flex align-items-center justify-content-center p-3" style={{ width: '36px', height: '36px' }}>1</span>
-                                    <div>
-                                        <h6 className="fw-bold text-white mb-1">Connect Datasets</h6>
-                                        <p className="text-secondary small mb-0">Sync PDFs, SQL instances, or webhooks seamlessly into vector indexes.</p>
+                                {homePage?.codeIntegrationSteps?.map(codeIntegrationStep => (
+                                    <div className="d-flex gap-3">
+                                        <span className="badge bg-secondary bg-opacity-20 text-info border border-secondary border-opacity-20 rounded-circle d-flex align-items-center justify-content-center p-3" style={{ width: '36px', height: '36px' }}>{codeIntegrationStep?.stepCount}</span>
+                                        <div>
+                                            <h6 className="fw-bold text-white mb-1">{codeIntegrationStep?.title}</h6>
+                                            <p className="text-secondary small mb-0">{codeIntegrationStep?.description}</p>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div className="d-flex gap-3">
-                                    <span className="badge bg-secondary bg-opacity-20 text-info border border-secondary border-opacity-20 rounded-circle d-flex align-items-center justify-content-center p-3" style={{ width: '36px', height: '36px' }}>2</span>
-                                    <div>
-                                        <h6 className="fw-bold text-white mb-1">Configure Guardrails</h6>
-                                        <p className="text-secondary small mb-0">Define context windows, output schemas, and automated safety policies.</p>
-                                    </div>
-                                </div>
-
-                                <div className="d-flex gap-3">
-                                    <span className="badge bg-secondary bg-opacity-20 text-info border border-secondary border-opacity-20 rounded-circle d-flex align-items-center justify-content-center p-3" style={{ width: '36px', height: '36px' }}>3</span>
-                                    <div>
-                                        <h6 className="fw-bold text-white mb-1">Deploy Endpoint</h6>
-                                        <p className="text-secondary small mb-0">Export a secure REST or gRPC endpoint ready for high-concurrency traffic.</p>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
 
@@ -140,19 +126,7 @@ export const Home = () => {
                                     <span className="text-secondary font-monospace ms-2 small">agent_pipeline.js</span>
                                 </div>
                                 <pre className="font-monospace text-light small mb-0">
-                                    <code>{`import { AIClient } from '@AI-ai/sdk';
-
-                                    const client = new AIClient({ apiKey: process.env.AI_KEY });
-
-                                    const agent = await client.agents.create({
-                                    model: 'AI-3-turbo',
-                                    tools: ['web_search', 'code_interpreter'],
-                                    guardrails: { strictSafety: true }
-                                    });
-
-                                    const response = await agent.run({
-                                    prompt: 'Analyze quarterly revenue and generate insights.'
-                                    });`}</code>
+                                    <code>{homePage?.codeIntegrationSample}</code>
                                 </pre>
                             </div>
                         </div>
@@ -164,18 +138,14 @@ export const Home = () => {
             <section id="stats" className="py-5 bg-black bg-opacity-40 border-top border-bottom border-secondary border-opacity-10">
                 <div className="container py-4">
                     <div className="row text-center g-4">
-                        <div className="col-6 col-md-3">
-                            <h2 className="display-5 fw-bold text-white">99.99%</h2>
-                            <p className="text-secondary small mb-0">API Uptime SLA</p>
-                        </div>
-                        <div className="col-6 col-md-3">
-                            <h2 className="display-5 fw-bold text-white">12M+</h2>
-                            <p className="text-secondary small mb-0">Daily Predictions</p>
-                        </div>
-                        <div className="col-6 col-md-3">
-                            <h2 className="display-5 fw-bold text-white">&lt; 40ms</h2>
-                            <p className="text-secondary small mb-0">Average Latency</p>
-                        </div>
+                        {homePage?.stats?.map(stat => (
+                            <div className="col-6 col-md-3">
+                                <h2 className="display-5 fw-bold text-white">{stat?.value}{stat?.unit}</h2>
+
+                                <p className="text-secondary small mb-0">{stat?.label}</p>
+                            </div>
+                        ))}
+
                         <div className="col-6 col-md-3">
                             <h2 className="display-5 fw-bold text-white">SOC-2</h2>
                             <p className="text-secondary small mb-0">Type II Certified</p>
@@ -193,12 +163,11 @@ export const Home = () => {
                     </div>
 
                     <div className="row g-4 align-items-stretch">
-                        {Array.from({ length: 3 }).map((_, index) => (
+                        {homePage?.pricingPlans?.map((pricingPlan) => (
                             <div
-                                key={index}
                                 className="col-md-4"
                             >
-                                <PricingPlan />
+                                <PricingPlan pricingPlan={pricingPlan} />
                             </div>
                         ))}
 
