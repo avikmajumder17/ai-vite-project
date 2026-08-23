@@ -1,38 +1,31 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const blogs = [
-  {
-    id: 1,
-    title: "How AI is Changing the Future",
-    slug: "how-ai-is-changing-the-future",
-    category: "Artificial Intelligence",
-    image: "https://picsum.photos/600/350?random=1",
-    description:
-      "Discover how artificial intelligence is transforming industries and improving productivity worldwide.",
-  },
-  {
-    id: 2,
-    title: "Top 10 AI Tools in 2026",
-    slug: "top-10-ai-tools-in-2026",
-    category: "Technology",
-    image: "https://picsum.photos/600/350?random=2",
-    description:
-      "Explore the best AI tools that developers, designers, and businesses are using today.",
-  },
-  {
-    id: 3,
-    title: "Machine Learning vs Deep Learning",
-    slug: "machine-learning-vs-deep-learning",
-    category: "Education",
-    image: "https://picsum.photos/600/350?random=3",
-    description:
-      "Understand the difference between Machine Learning and Deep Learning with simple examples.",
-  },
-];
+import api from "../../api/axios";
 
 
 
 export const Blogs = () => {
+    const [blogs, setBlogs] = useState([]);
+
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            try {
+                const response = await api.get("/blogs");
+
+                setBlogs(response?.data?.data?.blogs);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                console.log("Blog is fetched successfully");
+            }
+        };
+
+        fetchBlogs();
+    }, []);
+
+
+
     return (
         <section className="container py-5">
             <div className="text-center mb-5">
@@ -44,27 +37,27 @@ export const Blogs = () => {
 
             <div className="row g-4">
                 {blogs.map((blog) => (
-                    <div className="col-lg-4 col-md-6" key={blog.id}>
+                    <div className="col-lg-4 col-md-6" key={blog?._id}>
                         <div className="card bg-dark border-secondary h-100 text-light shadow">
-                            <img
+                            {/* <img
                                 src={blog.image}
                                 className="card-img-top"
                                 alt={blog.title}
-                            />
+                            /> */}
 
                             <div className="card-body d-flex flex-column">
                                 <span className="badge bg-primary mb-2">
-                                    {blog.category}
+                                    {blog?.blogCategory}
                                 </span>
 
-                                <h4>{blog.title}</h4>
+                                <h4>{blog?.blogTitle}</h4>
 
                                 <p className="text-secondary">
-                                    {blog.description}
+                                    {blog?.blogDescription}
                                 </p>
 
                                 <Link
-                                    to={`/blog/${blog.slug}`}
+                                    to={`/blog/${blog?._id}`}
                                     className="btn btn-primary mt-auto"
                                 >
                                     Read More
