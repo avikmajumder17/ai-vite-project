@@ -25,7 +25,7 @@ export const Footer = () => {
                     <div className="col-6 col-md-3">
                         <h6 className="text-white fw-bold small text-uppercase mb-3">Company</h6>
                         <ul className="list-unstyled text-secondary small d-flex flex-column gap-2 mb-0">
-                            <li><a href="#" className="text-decoration-none text-secondary">About Us</a></li>
+                            <li><Link to="/about" className="text-decoration-none text-secondary">About Us</Link></li>
                             
                             <li><Link to="/blogs" className="text-decoration-none text-secondary">Blog</Link></li>
                         </ul>

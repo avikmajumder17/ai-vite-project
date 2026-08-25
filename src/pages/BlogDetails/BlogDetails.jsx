@@ -1,41 +1,36 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-const blogs = [
-    {
-        id: 1,
-        title: "How AI is Changing the Future",
-        slug: "how-ai-is-changing-the-future",
-        category: "Artificial Intelligence",
-        image: "https://picsum.photos/600/350?random=1",
-        description:
-            "Discover how artificial intelligence is transforming industries and improving productivity worldwide.",
-    },
-    {
-        id: 2,
-        title: "Top 10 AI Tools in 2026",
-        slug: "top-10-ai-tools-in-2026",
-        category: "Technology",
-        image: "https://picsum.photos/600/350?random=2",
-        description:
-            "Explore the best AI tools that developers, designers, and businesses are using today.",
-    },
-    {
-        id: 3,
-        title: "Machine Learning vs Deep Learning",
-        slug: "machine-learning-vs-deep-learning",
-        category: "Education",
-        image: "https://picsum.photos/600/350?random=3",
-        description:
-            "Understand the difference between Machine Learning and Deep Learning with simple examples.",
-    },
-];
+import api from "../../api/axios";
+import { formattedDate } from "../../hooks/useFormattedDate";
 
 
 
 export const BlogDetails = () => {
+    const [blogDetails, setBlogDetails] = useState({});
+
     const { slug } = useParams();
 
-    const blogDetails = blogs.find(blog => blog.slug === slug);
+    useEffect(() => {
+        const fetchBlog = async () => {
+            try {
+                const response = await api.get(`/blogs/${slug}`);
+
+                setBlogDetails(response?.data?.data?.blog);
+
+                console.log(response?.data?.data?.blog);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                console.log("Blog fetched successfully");
+            }
+        };
+
+        fetchBlog();
+    }, []);
+
+
+    
 
 
     return (
@@ -44,27 +39,27 @@ export const BlogDetails = () => {
             <div className="mb-4">
                 <img
                     src={blogDetails?.image}
-                    alt={blogDetails?.title}
+                    alt={blogDetails?.blogTitle}
                     className="img-fluid rounded w-100"
                 />
             </div>
 
             <span className="badge bg-primary mb-3">
-                {blogDetails?.category}
+                {blogDetails?.blogCategory}
             </span>
 
             <h1 className="fw-bold mb-3">
-                {blogDetails?.title}
+                {blogDetails?.blogTitle}
             </h1>
 
             <div className="d-flex gap-4 text-secondary mb-4">
                 <span>By Admin</span>
-                <span>July 20, 2026</span>
+                <span>{formattedDate(blogDetails?.blogPostDate)}</span>
                 <span>8 min read</span>
             </div>
 
             <p className="lead">
-                {blogDetails?.description}
+                {blogDetails?.blogDescription}
             </p>
 
             <h3 className="mt-5 mb-3">

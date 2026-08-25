@@ -5,6 +5,7 @@ import { LogIn } from "../pages/LogIn/LogIn";
 import { Register } from "../pages/Register/Register";
 import { Blogs } from "../pages/Blogs/Blogs";
 import { BlogDetails } from "../pages/BlogDetails/BlogDetails";
+import About from "../pages/About/About";
 
 
 
@@ -17,7 +18,7 @@ export const AllRoutes = () => {
 
       <Route path="/login" element={<LogIn />} />
 
-      <Route path="/about" element={<Home />} />
+      <Route path="/about" element={<About />} />
 
       <Route path="/blogs" element={<Blogs />} />
 
