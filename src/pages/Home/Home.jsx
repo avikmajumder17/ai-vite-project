@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 import { PricingPlan } from "../../components/PricingPlan";
 import api from "../../api/axios";
+import { Loader } from "../../components/Loader";
 
 
 
 export const Home = () => {
     const [homePage, setHomePage] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchHomePage = async () => {
             try {
+                setIsLoading(true);
+
                 const response = await api.get("/homePage");
 
                 setHomePage(response.data.data.homePage);
             } catch (err) {
                 console.log(err);
             } finally {
-                console.log("Done")
+                setIsLoading(false);
             }
         };
 
@@ -28,6 +32,8 @@ export const Home = () => {
 
     return (
         <>
+            {isLoading && <Loader />}
+
             {/* SECTION 1: HERO */}
             <section className="py-5 my-lg-5 text-center position-relative overflow-hidden">
                 <div className="container position-relative z-1 my-4">
