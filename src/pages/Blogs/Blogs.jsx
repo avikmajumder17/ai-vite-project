@@ -7,6 +7,7 @@ import api from "../../api/axios";
 
 export const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
+    const [imageBaseUrl, setImageBaseUrl] = useState("");
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -14,6 +15,7 @@ export const Blogs = () => {
                 const response = await api.get("/blogs");
 
                 setBlogs(response?.data?.data?.blogs);
+                setImageBaseUrl(response?.data?.imageBaseUrl);
             } catch (err) {
                 console.log(err);
             } finally {
@@ -39,11 +41,11 @@ export const Blogs = () => {
                 {blogs.map((blog) => (
                     <div className="col-lg-4 col-md-6" key={blog?._id}>
                         <div className="card bg-dark border-secondary h-100 text-light shadow">
-                            {/* <img
-                                src={blog.image}
+                            <img
+                                src={`${imageBaseUrl}/${blog?.image}`}
                                 className="card-img-top"
-                                alt={blog.title}
-                            /> */}
+                                alt={blog?.title}
+                            />
 
                             <div className="card-body d-flex flex-column">
                                 <span className="badge bg-primary mb-2">

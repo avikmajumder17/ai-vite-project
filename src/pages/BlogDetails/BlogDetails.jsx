@@ -8,6 +8,7 @@ import { formattedDate } from "../../hooks/useFormattedDate";
 
 export const BlogDetails = () => {
     const [blogDetails, setBlogDetails] = useState({});
+    const [imageBaseUrl, setImageBaseUrl] = useState("");
 
     const { slug } = useParams();
 
@@ -17,8 +18,7 @@ export const BlogDetails = () => {
                 const response = await api.get(`/blogs/${slug}`);
 
                 setBlogDetails(response?.data?.data?.blog);
-
-                console.log(response?.data?.data?.blog);
+                setImageBaseUrl(response?.data?.imageBaseUrl);
             } catch (err) {
                 console.log(err);
             } finally {
@@ -38,7 +38,7 @@ export const BlogDetails = () => {
 
             <div className="mb-4">
                 <img
-                    src={blogDetails?.image}
+                    src={`${imageBaseUrl}/${blogDetails?.image}`}
                     alt={blogDetails?.blogTitle}
                     className="img-fluid rounded w-100"
                 />
