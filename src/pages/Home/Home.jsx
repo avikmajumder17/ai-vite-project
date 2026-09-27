@@ -1,39 +1,35 @@
-import { useLayoutEffect, useState } from "react";
+import { useLoaderData } from "react-router";
 
 import { PricingPlan } from "../../components/PricingPlan";
 import api from "../../api/axios";
-import { Loader } from "../../components/Loader";
 
 
 
-export const Home = () => {
-    const [homePage, setHomePage] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+export async function loader() {
+    try {
+        const response = await api.get("/homePage");
 
-    useLayoutEffect(() => {
-        const fetchHomePage = async () => {
-            try {
-                setIsLoading(true);
+        return {
+            homePage: response?.data?.data?.homePage
+        }
+    } catch (err) {
+        console.log(err);
 
-                const response = await api.get("/homePage");
+        return {
+            homePage: null
+        }
+    }  
+}
 
-                setHomePage(response.data.data.homePage);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
 
-        fetchHomePage();
-    }, []);
+
+const Home = () => {
+    const { homePage } = useLoaderData();
 
 
 
     return (
         <>
-            {isLoading && <Loader />}
-
             {/* SECTION 1: HERO */}
             <section className="py-5 my-lg-5 text-center position-relative overflow-hidden">
                 <div className="container position-relative z-1 my-4">
@@ -231,3 +227,5 @@ export const Home = () => {
         </>
     )
 }
+
+export default Home;
