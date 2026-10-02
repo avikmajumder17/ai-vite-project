@@ -10,7 +10,9 @@ import "./index.css";
 
 
 const Root = () => {
-    
+    useEffect(() => {
+        import("bootstrap/dist/js/bootstrap.js");
+    }, []);
 
  
 
