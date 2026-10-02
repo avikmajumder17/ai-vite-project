@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 
 
-export const Register = () => {
+const Register = () => {
     return (
         <div className="bg-dark text-light min-vh-100 d-flex flex-column justify-content-center py-5" data-bs-theme="dark">
             <div className="container">
@@ -133,3 +133,5 @@ export const Register = () => {
         </div>
     )
 }
+
+export default Register;

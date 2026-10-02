@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 
 
-export const LogIn = () => {
+const LogIn = () => {
     return (
         <div className="bg-dark text-light min-vh-100 d-flex flex-column justify-content-center py-5" data-bs-theme="dark">
             <div className="container">
@@ -120,3 +120,5 @@ export const LogIn = () => {
         </div>
     )
 }
+
+export default LogIn;

@@ -6,7 +6,7 @@ import { formattedDate } from "../../hooks/useFormattedDate";
 
 
 
-export const BlogDetails = () => {
+const BlogDetails = () => {
     const [blogDetails, setBlogDetails] = useState({});
     const [imageBaseUrl, setImageBaseUrl] = useState("");
 
@@ -91,3 +91,5 @@ export const BlogDetails = () => {
         </section>
     )
 }
+
+export default BlogDetails;

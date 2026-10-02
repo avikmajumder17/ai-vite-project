@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 
 
-export const PageNotFound = () => {
+const PageNotFound = () => {
     return (
         <div className="bg-dark text-light min-vh-100 d-flex flex-column justify-content-center align-items-center py-5 text-center" data-bs-theme="dark">
             <div className="container">
@@ -65,3 +65,5 @@ export const PageNotFound = () => {
         </div>
     )
 }
+
+export default PageNotFound;

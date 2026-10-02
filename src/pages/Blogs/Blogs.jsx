@@ -5,7 +5,7 @@ import api from "../../api/axios";
 
 
 
-export const Blogs = () => {
+const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
     const [imageBaseUrl, setImageBaseUrl] = useState("");
 
@@ -72,3 +72,5 @@ export const Blogs = () => {
         </section>
     )
 }
+
+export default Blogs;
