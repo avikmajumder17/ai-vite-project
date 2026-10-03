@@ -1,8 +1,8 @@
-import "./Loader.css";
+import "./PageLoader.css";
 
 
 
-export const Loader = () => {
+export const PageLoader = () => {
     return (
         <div className="ai-loader bg-dark bg-opacity-75 backdrop-blur">
             <div className="ai-loader-icon">

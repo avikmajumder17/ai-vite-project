@@ -1,37 +1,38 @@
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
+import { useLoaderData } from "react-router";
 
 import api from "../../api/axios";
-import { Loader } from "../../components/Loader";
+import { PageLoader } from "../../components/PageLoader";
 
 
 
-export default function About() {
-    const [aboutUsPage, setAboutUsPage] = useState({});
+//eslint-disable-next-line
+export async function loader() {
+    try {
+        const response = await api.get("/aboutPage");
+
+        return {
+            aboutUsPage: response?.data?.data?.aboutPage
+        }
+    } catch (err) {
+        console.log(err);
+
+        throw new Response("Failed to load about us page", { status: 500 });
+    }
+};
+
+
+const About = () => {
+    const { aboutUsPage } = useLoaderData();
+
+    //eslint-disable-next-line
     const [isLoading, setIsLoading] = useState(false);
-
-    useLayoutEffect(() => {
-        const fetchAboutUsPage = async () => {
-            try {
-                setIsLoading(true);
-
-                const response = await api.get("/aboutPage");
-
-                setAboutUsPage(response?.data?.data?.aboutPage);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchAboutUsPage();
-    }, []);
 
 
 
     return (
         <>
-            {isLoading && <Loader />}
+            {isLoading && <PageLoader />}
 
             <div className="about-page">
 
@@ -102,7 +103,7 @@ export default function About() {
                                         <div className="col-6">
                                             <div className="p-4 bg-light rounded-4 h-100">
                                                 <i className={`bi ${whoWeAreCard?.icon} text-primary fs-1`}></i>
-                                                
+
                                                 <h5 className="fw-bold text-secondary mt-3 mb-0">{whoWeAreCard?.title}</h5>
                                             </div>
                                         </div>
@@ -137,7 +138,7 @@ export default function About() {
                                         <p className="text-secondary">{whatWeDoCard?.description}</p>
                                     </div>
                                 </div>
-                            ))}                            
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -207,3 +208,5 @@ export default function About() {
         </>
     )
 }
+
+export default About;

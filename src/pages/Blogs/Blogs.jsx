@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router";
 
 import api from "../../api/axios";
 
 
 
+//eslint-disable-next-line
+export async function loader() {
+    try {
+        const response = await api.get("/blogs");
+
+        const blogs = response?.data?.data?.blogs;
+        const imageBaseUrl = response?.data?.imageBaseUrl;
+
+        return {
+            blogs,
+            imageBaseUrl
+        }
+    } catch (err) {
+        console.log(err);
+
+        throw new Response("Failed to load about us page", { status: 500 });
+    }
+};
+
 const Blogs = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [imageBaseUrl, setImageBaseUrl] = useState("");
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const response = await api.get("/blogs");
-
-                setBlogs(response?.data?.data?.blogs);
-                setImageBaseUrl(response?.data?.imageBaseUrl);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                console.log("Blog is fetched successfully");
-            }
-        };
-
-        fetchBlogs();
-    }, []);
+    const { blogs, imageBaseUrl } = useLoaderData();
 
 
 

@@ -5,6 +5,7 @@ import api from "../../api/axios";
 
 
 
+//eslint-disable-next-line
 export async function loader() {
     try {
         const response = await api.get("/homePage");
@@ -15,9 +16,7 @@ export async function loader() {
     } catch (err) {
         console.log(err);
 
-        return {
-            homePage: null
-        }
+        throw new Response("Failed to load about us page", { status: 500 });
     }  
 }
 

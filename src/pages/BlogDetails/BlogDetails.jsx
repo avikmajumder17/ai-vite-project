@@ -1,36 +1,33 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useLoaderData } from "react-router";
 
 import api from "../../api/axios";
 import { formattedDate } from "../../hooks/useFormattedDate";
 
 
 
+//eslint-disable-next-line
+export async function loader({ params }) {
+    try {
+        const response = await api.get(`/blogs/${params.slug}`);
+
+        const blogDetails = response?.data?.data?.blog;
+        const imageBaseUrl = response?.data?.imageBaseUrl;
+
+        return {
+            blogDetails,
+            imageBaseUrl
+        }
+    } catch (err) {
+        console.log(err);
+    } finally {
+        console.log("Blog fetched successfully");
+    }
+};
+
 const BlogDetails = () => {
-    const [blogDetails, setBlogDetails] = useState({});
-    const [imageBaseUrl, setImageBaseUrl] = useState("");
+    const { blogDetails, imageBaseUrl } = useLoaderData();
 
-    const { slug } = useParams();
-
-    useEffect(() => {
-        const fetchBlog = async () => {
-            try {
-                const response = await api.get(`/blogs/${slug}`);
-
-                setBlogDetails(response?.data?.data?.blog);
-                setImageBaseUrl(response?.data?.imageBaseUrl);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                console.log("Blog fetched successfully");
-            }
-        };
-
-        fetchBlog();
-    }, []);
-
-
-    
 
 
     return (
