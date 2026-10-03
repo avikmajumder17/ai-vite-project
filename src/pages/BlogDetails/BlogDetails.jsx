@@ -12,11 +12,9 @@ export async function loader({ params }) {
         const response = await api.get(`/blogs/${params.slug}`);
 
         const blogDetails = response?.data?.data?.blog;
-        const imageBaseUrl = response?.data?.imageBaseUrl;
 
         return {
-            blogDetails,
-            imageBaseUrl
+            blogDetails
         }
     } catch (err) {
         console.log(err);
@@ -26,7 +24,7 @@ export async function loader({ params }) {
 };
 
 const BlogDetails = () => {
-    const { blogDetails, imageBaseUrl } = useLoaderData();
+    const { blogDetails } = useLoaderData();
 
 
 
@@ -35,7 +33,7 @@ const BlogDetails = () => {
 
             <div className="mb-4">
                 <img
-                    src={`${imageBaseUrl}/${blogDetails?.image}`}
+                    src={blogDetails?.image}
                     alt={blogDetails?.blogTitle}
                     className="img-fluid rounded w-100"
                 />
