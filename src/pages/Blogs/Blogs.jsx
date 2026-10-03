@@ -10,11 +10,9 @@ export async function loader() {
         const response = await api.get("/blogs");
 
         const blogs = response?.data?.data?.blogs;
-        const imageBaseUrl = response?.data?.imageBaseUrl;
 
         return {
-            blogs,
-            imageBaseUrl
+            blogs
         }
     } catch (err) {
         console.log(err);
@@ -24,7 +22,7 @@ export async function loader() {
 };
 
 const Blogs = () => {
-    const { blogs, imageBaseUrl } = useLoaderData();
+    const { blogs } = useLoaderData();
 
 
 
@@ -42,7 +40,7 @@ const Blogs = () => {
                     <div className="col-lg-4 col-md-6" key={blog?._id}>
                         <div className="card bg-dark border-secondary h-100 text-light shadow">
                             <img
-                                src={`${imageBaseUrl}/${blog?.image}`}
+                                src={blog?.image}
                                 className="card-img-top"
                                 alt={blog?.title}
                             />
