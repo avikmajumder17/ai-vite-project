@@ -1,6 +1,22 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+import DropdownLoggedin from "./DropdownLoggedin";
+
+
 
 export const Header = () => {
+    const [isLoggedin, setIsLoggedin] = useState(false);
+    const [isDropdownExpanded, setIsDropdownExpanded] = useState(false);
+
+    const pathName = useLocation().pathname;
+
+    useEffect(() => {
+        localStorage.getItem("token") ? setIsLoggedin(true) : setIsLoggedin(false);
+    }, [pathName]);
+
+
+
     return (
         <nav className="navbar navbar-expand-lg border-bottom border-secondary border-opacity-25 sticky-top bg-dark bg-opacity-75 backdrop-blur py-3" >
             <div className="container">
@@ -34,20 +50,34 @@ export const Header = () => {
                         <li className="nav-item"><a className="nav-link px-3" href="#pricing">Pricing</a></li>
                     </ul>
                     <div className="d-flex gap-2 mt-3 mt-lg-0">
-                        <Link to="/login">
-                            <button className="btn btn-outline-secondary border-opacity-50 text-light btn-sm px-3">
-                                Sign In
-                            </button>
-                        </Link>
+                        {isLoggedin ? (
+                                <div className="position-relative">
+                                    <div onClick={() => setIsDropdownExpanded(prev => !prev)} className="user-profile-loggedin rounded-circle overflow-hidden" style={{ width: "2rem", height: "2rem", cursor: "pointer" }}>
+                                        <img src="../assets/hero.png" className="w-100 h-100" alt="" />
+                                    </div>
+                                    
+                                    {isDropdownExpanded && <DropdownLoggedin />}
+                                </div>
+                            )
+                            : (                                
+                                <div>
+                                    <Link to="/login" className="me-2">
+                                        <button className="btn btn-outline-secondary border-opacity-50 text-light btn-sm px-3">
+                                            Sign In
+                                        </button>
+                                    </Link>
 
-                        <Link to="/register">
-                            <button
-                                className="btn btn-sm px-3 text-white fw-semibold border-0"
-                                style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}
-                            >
-                                Get Started
-                            </button>
-                        </Link>                        
+                                    <Link to="/register">
+                                        <button
+                                            className="btn btn-sm px-3 text-white fw-semibold border-0"
+                                            style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}
+                                        >
+                                            Get Started
+                                        </button>
+                                    </Link>
+                                </div>
+                            )
+                        }                   
                     </div>
                 </div>
             </div>

@@ -1,8 +1,45 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import api from "../../api/axios";
 
 
 
 const Register = () => {
+    const navigate = useNavigate();
+
+    const [newUserRegisterDetails, setNewUserRegisterDetails] = useState({
+        name: "",
+        userName: "",
+        email: "",
+        password: "",
+        passwordConfirm: ""
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setNewUserRegisterDetails((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleNewUserSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const newUserDetails = await api.post("/users/user-signup", newUserRegisterDetails);
+
+            localStorage.setItem("token", newUserDetails?.data?.token);
+
+            console.log(newUserDetails?.data?.token);
+
+            navigate("/", { replace: true });
+        } catch (err) {
+            console.log(err?.response?.message);
+        }
+    };
 
 
     
@@ -50,7 +87,7 @@ const Register = () => {
                             </div>
 
                             {/* Register Form */}
-                            <form>
+                            <form onSubmit={handleNewUserSubmit}>
                                 {/* Full Name Field */}
                                 <div className="mb-3">
                                     <label htmlFor="fullName" className="form-label text-secondary small mb-1">Full Name</label>
@@ -61,7 +98,24 @@ const Register = () => {
                                         <input
                                             type="text"
                                             className="form-control bg-dark border-secondary border-opacity-25 text-light"
-                                            id="fullName"
+                                            name="name"
+                                            onChange={handleChange}
+                                            placeholder="John Doe"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="fullName" className="form-label text-secondary small mb-1">User Name</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text bg-dark border-secondary border-opacity-25 text-secondary">
+                                            <i className="bi bi-person"></i>
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-dark border-secondary border-opacity-25 text-light"
+                                            name="userName"
+                                            onChange={handleChange}
                                             placeholder="John Doe"
                                         />
                                     </div>
@@ -77,7 +131,8 @@ const Register = () => {
                                         <input
                                             type="email"
                                             className="form-control bg-dark border-secondary border-opacity-25 text-light"
-                                            id="email"
+                                            name="email"
+                                            onChange={handleChange}
                                             placeholder="name@example.com"
                                         />
                                     </div>
@@ -93,7 +148,27 @@ const Register = () => {
                                         <input
                                             type="password"
                                             className="form-control bg-dark border-secondary border-opacity-25 text-light"
-                                            id="password"
+                                            name="password"
+                                            onChange={handleChange}
+                                            placeholder="Create a strong password"
+                                        />
+                                    </div>
+
+                                    <p className="small mt-2"><em><i className="bi bi-info-circle"></i> Password must be atleast 8 character long.</em></p>
+                                </div>
+
+                                {/* Password Confirm Field */}
+                                <div className="mb-3">
+                                    <label htmlFor="password" className="form-label text-secondary small mb-1">Password Confirm</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text bg-dark border-secondary border-opacity-25 text-secondary">
+                                            <i className="bi bi-lock"></i>
+                                        </span>
+                                        <input
+                                            type="password"
+                                            className="form-control bg-dark border-secondary border-opacity-25 text-light"
+                                            name="passwordConfirm"
+                                            onChange={handleChange}
                                             placeholder="Create a strong password"
                                         />
                                     </div>
@@ -113,7 +188,7 @@ const Register = () => {
 
                                 {/* Submit Button */}
                                 <button
-                                    type="button"
+                                    type="submit"
                                     className="btn w-100 py-2 text-white fw-semibold border-0"
                                     style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}
                                 >

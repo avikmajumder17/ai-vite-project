@@ -1,8 +1,50 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import api from "../../api/axios";
 
 
 
 const LogIn = () => {
+    const navigate = useNavigate();
+
+    const [userLoginForm, setUserLoginForm] = useState({
+        email: "",
+        password: ""
+    });
+
+    const handleLogin = (e) => {
+        const { name, value } = e.target;
+
+        setUserLoginForm((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+
+        try {
+            const userDetails = await api.post("/users/admin-login", userLoginForm);
+
+            localStorage.setItem("token", userDetails?.data?.token);
+
+            setUserLoginForm({
+                email: "",
+                password: ""
+            });
+
+            navigate("/", { replace: true });
+        } catch (err) {
+            console.log(err?.response?.message);
+        }
+    };
+
+    console.log(userLoginForm);
+
+
+
     return (
         <div className="bg-dark text-light min-vh-100 d-flex flex-column justify-content-center py-5" data-bs-theme="dark">
             <div className="container">
@@ -47,7 +89,7 @@ const LogIn = () => {
                             </div>
 
                             {/* Sign In Form */}
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 {/* Email Field */}
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label text-secondary small mb-1">Email address</label>
@@ -58,7 +100,8 @@ const LogIn = () => {
                                         <input
                                             type="email"
                                             className="form-control bg-dark border-secondary border-opacity-25 text-light"
-                                            id="email"
+                                            name="email"
+                                            onChange={handleLogin}
                                             placeholder="name@example.com"
                                         />
                                     </div>
@@ -77,7 +120,8 @@ const LogIn = () => {
                                         <input
                                             type="password"
                                             className="form-control bg-dark border-secondary border-opacity-25 text-light"
-                                            id="password"
+                                            name="password"
+                                            onChange={handleLogin}
                                             placeholder="••••••••"
                                         />
                                     </div>
@@ -97,7 +141,7 @@ const LogIn = () => {
 
                                 {/* Submit Button */}
                                 <button
-                                    type="button"
+                                    type="submit"
                                     className="btn w-100 py-2 text-white fw-semibold border-0"
                                     style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}
                                 >
